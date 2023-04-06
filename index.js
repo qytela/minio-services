@@ -37,21 +37,24 @@ program
 
 program
   .command("config-use")
+  .usage("<number>")
   .description("Set config to use")
-  .option("-n, --number <number>", "Choose config")
-  .action((str, { _optionValues: args }) => {
-    if (!args.number) {
+  .argument("<number>", "Select a configuration number")
+  .action((str) => {
+    if (!str) {
       return console.log(chalk.red("Number required!"));
     }
 
+    const number = parseInt(str);
+
     if (!configExists()) return configNotExists();
-    if (!parseConfig().configs[args.number]) {
+    if (!parseConfig().configs[number]) {
       console.log(chalk.red("Config number invalid!"));
       console.log(chalk.yellow("Set your config first..."));
       return;
     }
 
-    SetConfig(args.number);
+    SetConfig(number);
   });
 
 program

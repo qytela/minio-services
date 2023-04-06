@@ -1,7 +1,7 @@
 const fs = require("fs");
 const chalk = require("chalk");
 
-const configFile = "./config.json";
+const configFileName = "./config.json";
 
 const convertBytesToMB = (bytes) => {
   const mb = 1024 * 1024;
@@ -10,14 +10,14 @@ const convertBytesToMB = (bytes) => {
 };
 
 const parseConfig = () => {
-  const configData = fs.readFileSync(configFile);
+  const configData = fs.readFileSync(configFileName);
   const config = JSON.parse(configData);
 
   return config;
 };
 
 const configExists = () => {
-  return fs.existsSync(configFile);
+  return fs.existsSync(configFileName);
 };
 
 const configNumberExists = () => {
@@ -30,6 +30,8 @@ const configNotExists = () => {
 };
 
 module.exports = {
+  configFileName,
+
   convertBytesToMB,
   parseConfig,
   configExists,
