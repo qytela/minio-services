@@ -1,3 +1,4 @@
+const { configExists, configNotExists } = require("./helpers");
 const { Command } = require("commander");
 const chalk = require("chalk");
 
@@ -26,6 +27,8 @@ program
   .command("lb")
   .description("List of all buckets")
   .action(() => {
+    if (!configExists()) return configNotExists();
+
     GetBucket();
   });
 
@@ -39,6 +42,8 @@ program
       return console.log(chalk.red("Bucket name required!"));
     }
 
+    if (!configExists()) return configNotExists();
+
     ListObject(args.bucket, args.limit);
   });
 
@@ -46,13 +51,16 @@ program
   .command("db")
   .description("Download all files from bucket")
   .option("-b, --bucket <bucket>", "Bucket name")
-  .option("-z, --zip <boolean>", "Compress to zip", false)
+  .option("-z, --zip", "Compress to zip", false)
+  .option("-r, --remove", "Remove folder after finish zip", false)
   .action((str, { _optionValues: args }) => {
     if (!args.bucket) {
       return console.log(chalk.red("Bucket name required!"));
     }
 
-    DownloadObject(args.bucket, args.zip);
+    if (!configExists()) return configNotExists();
+
+    DownloadObject(args.bucket, args.zip, args.remove);
   });
 
 program.parse(process.argv);

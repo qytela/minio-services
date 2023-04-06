@@ -1,12 +1,7 @@
 const MinioClient = require("../lib/MinioClient");
+const { convertBytesToMB } = require("../helpers");
 const chalk = require("chalk");
 const { table } = require("table");
-
-const convertBytesToMB = (bytes) => {
-  const mb = 1024 * 1024;
-  const fileSizeInMB = bytes / mb;
-  return fileSizeInMB.toFixed(2);
-};
 
 const ListObject = (bucketName, numLimit = 10) => {
   const limit = parseInt(numLimit);

@@ -46,7 +46,7 @@ const traverseFolder = (dir, zipFolder) => {
   });
 };
 
-const DownloadObject = (bucketName, withZip = false) => {
+const DownloadObject = (bucketName, withZip = false, withRemove = false) => {
   let data = [];
 
   const stream = MinioClient.listObjects(bucketName, "", true);
@@ -56,6 +56,7 @@ const DownloadObject = (bucketName, withZip = false) => {
   });
 
   stream.on("end", async () => {
+    console.log("Path =>", chalk.green(`./downloads/${bucketName}\n`));
     console.log(chalk.bgBlue("Start downloading all objects..."));
 
     await Promise.all(
@@ -84,7 +85,16 @@ const DownloadObject = (bucketName, withZip = false) => {
             )}'`,
           );
 
-          console.log(`${chalk.bgBlue("End zip...")}`);
+          console.log(`${chalk.bgBlue("Finish zip...")}`);
+
+          if (withRemove) {
+            console.log(`\n${chalk.bgBlue("Start remove folder...")}`);
+
+            fs.rmSync(folderPath, { recursive: true, force: true });
+            console.log(`Folder '${chalk.green(folderPath)}' removed`);
+
+            console.log(`${chalk.bgBlue("Finish remove folder...")}`);
+          }
         });
     }
   });
