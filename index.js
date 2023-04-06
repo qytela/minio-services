@@ -7,7 +7,12 @@ const {
 const { Command } = require("commander");
 const chalk = require("chalk");
 
-const { NewConfig, SetConfig, ListConfig } = require("./lib/SetConfig");
+const {
+  NewConfig,
+  SetConfig,
+  RemoveConfig,
+  ListConfig,
+} = require("./lib/SetConfig");
 
 const GetBucket = require("./utils/GetBucket");
 const ListObject = require("./utils/ListObject");
@@ -19,15 +24,17 @@ program
   .command("config-list")
   .description("List config exists and current used")
   .action(() => {
+    if (!configExists()) return configNotExists();
+
     ListConfig();
   });
 
 program
   .command("config-new")
-  .description("Set new config Minio")
+  .description("Set new config")
   .option("-ep, --endpoint <endpoint>", "Minio end point", "localhost")
   .option("-p, --port <port>", "Minio port", 9000)
-  .option("-e, --ssl <boolean>", "Minio HTTP (false) or HTTPS(true)", false)
+  .option("-e, --ssl", "Minio HTTP (false) or HTTPS(true)", false)
   .option("-ak, --accesskey <accesskey>", "Minio access key", "fansa")
   .option("-sk, --secretkey <secretkey>", "Minio secret key", "password")
   .option("-r, --region <region>", "Minio region", "us-east-1")
@@ -55,6 +62,27 @@ program
     }
 
     SetConfig(number);
+  });
+
+program
+  .command("config-remove")
+  .usage("<number>")
+  .description("Remove config")
+  .argument("<number>", "Select a configuration number")
+  .action((str) => {
+    if (!str) {
+      return console.log(chalk.red("Number required!"));
+    }
+
+    const number = parseInt(str);
+
+    if (!parseConfig().configs[number]) {
+      console.log(chalk.red("Config number invalid!"));
+      console.log(chalk.yellow("Set your config first..."));
+      return;
+    }
+
+    RemoveConfig(number);
   });
 
 program
