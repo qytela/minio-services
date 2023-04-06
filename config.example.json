@@ -1,8 +1,4 @@
 {
-  "MINIO_END_POINT": "localhost",
-  "MINIO_PORT": 9000,
-  "MINIO_USE_SSL": false,
-  "MINIO_ACCESS_KEY": "fansa",
-  "MINIO_SECRET_KEY": "password",
-  "MINIO_REGION": "us-east-1"
+  "useConfig": 0,
+  "configs": []
 }
