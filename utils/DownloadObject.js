@@ -9,13 +9,17 @@ const zip = new JSZip();
 const downloadFile = (objectName, bucketName) => {
   return new Promise((resolve) => {
     MinioClient.fGetObject(
-      "pnm-dashboard",
+      bucketName,
       objectName,
       `./downloads/${bucketName}/${objectName}`,
       (err) => {
         const dots = ".".repeat(50 - objectName.length);
 
-        if (err) console.log(`${objectName}${dots}${chalk.red("FAILED")}`);
+        if (err) {
+          console.log(err);
+          return console.log(`${objectName}${dots}${chalk.red("FAILED")}`);
+        }
+
         console.log(`${objectName}${dots}${chalk.green("SUCCESS")}`);
         resolve(true);
       },
