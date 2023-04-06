@@ -1,4 +1,5 @@
 const MinioClient = require("../lib/MinioClient");
+const chalk = require("chalk");
 const { table } = require("table");
 
 const convertBytesToMB = (bytes) => {
@@ -7,7 +8,8 @@ const convertBytesToMB = (bytes) => {
   return fileSizeInMB.toFixed(2);
 };
 
-const ListObject = (bucketName) => {
+const ListObject = (bucketName, numLimit = 10) => {
+  const limit = parseInt(numLimit);
   const stream = MinioClient.listObjects(bucketName, "", true);
 
   let data = [];
@@ -19,9 +21,13 @@ const ListObject = (bucketName) => {
   stream.on("end", function (obj) {
     const tableData = [
       ["OBJECT NAME", "OBJECT SIZE (MB)"],
-      ...data.map((item) => {
-        return [item.name, convertBytesToMB(item.size)];
-      }),
+      ...data
+        .map((item, index) => {
+          if (index < limit) {
+            return [item.name, convertBytesToMB(item.size)];
+          }
+        })
+        .filter((i) => i !== undefined),
     ];
 
     const config = {
@@ -30,6 +36,10 @@ const ListObject = (bucketName) => {
         1: { alignment: "right" },
       },
     };
+
+    if (limit < data.length) {
+      tableData.push([chalk.green(`${data.length - limit} more files...`), 0]);
+    }
 
     const output = table(tableData, config);
     console.log(output);

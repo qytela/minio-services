@@ -33,12 +33,13 @@ program
   .command("lo")
   .description("List of all objets")
   .option("-b, --bucket <bucket>", "Bucket name")
+  .option("-l, --limit <limit>", "Limit to show all objects", 10)
   .action((str, { _optionValues: args }) => {
     if (!args.bucket) {
       return console.log(chalk.red("Bucket name required!"));
     }
 
-    ListObject(args.bucket);
+    ListObject(args.bucket, args.limit);
   });
 
 program
