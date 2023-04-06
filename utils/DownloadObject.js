@@ -13,7 +13,9 @@ const downloadFile = (objectName, bucketName) => {
       objectName,
       `./downloads/${bucketName}/${objectName}`,
       (err) => {
-        const dots = ".".repeat(50 - objectName.length);
+        const dots = ".".repeat(
+          Math.max(process.stdout.columns - objectName.length - 7, 0),
+        );
 
         if (err) {
           console.log(err);
