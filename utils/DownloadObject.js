@@ -7,7 +7,7 @@ const chalk = require("chalk");
 const zip = new JSZip();
 
 const downloadFile = (objectName, bucketName) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     MinioClient.fGetObject(
       bucketName,
       objectName,
@@ -19,11 +19,12 @@ const downloadFile = (objectName, bucketName) => {
 
         if (err) {
           console.log(err);
-          return console.log(`${objectName}${dots}${chalk.red("FAILED")}`);
+          console.log(`${objectName}${dots}${chalk.red("FAILED")}`);
+          reject();
+        } else {
+          console.log(`${objectName}${dots}${chalk.green("SUCCESS")}`);
+          resolve();
         }
-
-        console.log(`${objectName}${dots}${chalk.green("SUCCESS")}`);
-        resolve(true);
       },
     );
   });
@@ -46,7 +47,16 @@ const traverseFolder = (dir, zipFolder) => {
   });
 };
 
-const DownloadObject = (bucketName, withZip = false, withRemove = false) => {
+const DownloadObject = async (
+  bucketName,
+  withZip = false,
+  withRemove = false,
+) => {
+  const bucketExists = await MinioClient.bucketExists(bucketName);
+  if (!bucketExists) {
+    return console.log(chalk.red("Bucket not exists!"));
+  }
+
   let data = [];
 
   const stream = MinioClient.listObjects(bucketName, "", true);
@@ -86,16 +96,16 @@ const DownloadObject = (bucketName, withZip = false, withRemove = false) => {
           );
 
           console.log(`${chalk.bgBlue("Finish zip...")}`);
-
-          if (withRemove) {
-            console.log(`\n${chalk.bgBlue("Start remove folder...")}`);
-
-            fs.rmSync(folderPath, { recursive: true, force: true });
-            console.log(`Folder '${chalk.green(folderPath)}' removed`);
-
-            console.log(`${chalk.bgBlue("Finish remove folder...")}`);
-          }
         });
+    }
+
+    if (withRemove) {
+      console.log(`\n${chalk.bgBlue("Start remove folder...")}`);
+
+      fs.rmSync(folderPath, { recursive: true, force: true });
+      console.log(`Folder '${chalk.green(folderPath)}' removed`);
+
+      console.log(`${chalk.bgBlue("Finish remove folder...")}`);
     }
   });
 

@@ -3,7 +3,12 @@ const { convertBytesToMB } = require("../helpers");
 const chalk = require("chalk");
 const { table } = require("table");
 
-const ListObject = (bucketName, numLimit = 10) => {
+const ListObject = async (bucketName, numLimit = 10) => {
+  const bucketExists = await MinioClient.bucketExists(bucketName);
+  if (!bucketExists) {
+    return console.log(chalk.red("Bucket not exists!"));
+  }
+
   const limit = parseInt(numLimit);
   const stream = MinioClient.listObjects(bucketName, "", true);
 
