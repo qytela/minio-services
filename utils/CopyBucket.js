@@ -14,7 +14,7 @@ const CopyBucket = async (source, destination, withRemove) => {
     }
 
     await exec(`node index ub -s ./downloads/${source} -b ${destination}`);
-    console.log(chalk.bgGreen("Success to sync bucket..."));
+    console.log(chalk.bgGreen("Success to copy bucket..."));
 
     if (withRemove) {
       console.log(`\n${chalk.bgBlue("Start remove folder...")}`);

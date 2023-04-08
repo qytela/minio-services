@@ -19,6 +19,7 @@ const ListObject = require("./utils/ListObject");
 const DownloadObject = require("./utils/DownloadObject");
 const UploadObject = require("./utils/UploadObject");
 const CopyBucket = require("./utils/CopyBucket");
+const SyncBucket = require("./utils/SyncBucket");
 
 const program = new Command();
 
@@ -137,7 +138,7 @@ program
   .alias("ub")
   .description("Upload local files / folders to bucket")
   .option("-s, --source <source>", "Local source path")
-  .option("-b, --bucket <bucket>", "Bucket name destination")
+  .option("-b, --bucket <bucket>", "Destination bucket name")
   .action((str, { _optionValues: args }) => {
     if (!args.source) {
       return console.log(chalk.red("Source path required!"));
@@ -160,7 +161,7 @@ program
   .option("-d, --destination <destination>", "Destination bucket name")
   .option(
     "-r, --remove",
-    "Remove folder after finish sync (same as remove command download-bucket)",
+    "Remove folder after finish copy (same as remove command download-bucket)",
     false,
   )
   .action((str, { _optionValues: args }) => {
@@ -173,6 +174,34 @@ program
     if (!configExists() || !configNumberExists()) return configNotExists();
 
     CopyBucket(args.source, args.destination, args.remove);
+  });
+
+program
+  .command("sync-bucket")
+  .alias("sb")
+  .description(
+    "Sync bucket from cloud one to another cloud (different config), CONFIG_NUMBER:BUCKET_NAME",
+  )
+  .option("-s, --source <source>", "Source bucket name (e.g: 0:bucket-one)")
+  .option(
+    "-d, --destination <destination>",
+    "Destination bucket name (e.g: 1:another-bucket)",
+  )
+  .option(
+    "-r, --remove",
+    "Remove folder after finish sync (same as remove command download-bucket)",
+    false,
+  )
+  .action((str, { _optionValues: args }) => {
+    if (!args.source) {
+      return console.log(chalk.red("Source path required!"));
+    }
+    if (!args.destination) {
+      return console.log(chalk.red("Destination path required!"));
+    }
+    if (!configExists() || !configNumberExists()) return configNotExists();
+
+    SyncBucket(args.source, args.destination, args.remove);
   });
 
 program.parse(process.argv);
