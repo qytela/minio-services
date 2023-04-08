@@ -1,8 +1,10 @@
 {
   "name": "minio-services",
+  "author": "qytela",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "description": "MinIO services command helper",
   "dependencies": {
     "chalk": "4.1.2",
     "commander": "^10.0.0",
@@ -10,5 +12,19 @@
     "minio": "^7.0.33",
     "moment-timezone": "^0.5.43",
     "table": "^6.8.1"
-  }
+  },
+  "homepage": "https://github.com/qytela/minio-services",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qytela/minio-services.git"
+  },
+  "keywords": [
+    "minio-services",
+    "minio-command-helper"
+  ],
+  "bin": {
+    "minio-services": "index.js"
+  },
+  "preferGlobal": true,
+  "private": false
 }
