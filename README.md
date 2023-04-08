@@ -12,8 +12,16 @@ git clone https://github.com/qytela/minio-services.git
 
 ## Usage:
 
+`NodeJS`
+
 ```
 node index help
+```
+
+`Executable file`
+
+```
+./minio-services.exe help
 ```
 
 ```
