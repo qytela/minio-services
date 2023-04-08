@@ -20,7 +20,9 @@
   },
   "keywords": [
     "minio-services",
-    "minio-command-helper"
+    "minio-command-helper",
+    "minio",
+    "minio-helper"
   ],
   "bin": {
     "minio-services": "index.js"
