@@ -4,14 +4,20 @@ Command helper for MinIO.
 
 ## Installation:
 
-#### Globally via `npm`
+#### Clone `git` repository
 
-    npm install --global minio-services
+```
+git clone https://github.com/qytela/minio-services.git
+```
 
 ## Usage:
 
 ```
-Usage: minio-services [options] [command]
+node index help
+```
+
+```
+Usage: node index [options] [command]
 
 Options:
   -h, --help                    display help for command
