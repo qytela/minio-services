@@ -77,11 +77,11 @@ const DownloadObject = async (
 
     console.log(chalk.bgBlue("Finish downloading all objects..."));
 
+    const folderPath = `./downloads/${bucketName}`;
+    const outputFileName = `./downloads/${bucketName}.zip`;
+
     if (withZip) {
       console.log(`\n${chalk.bgBlue("Start zip...")}`);
-
-      const folderPath = `./downloads/${bucketName}`;
-      const outputFileName = `./downloads/${bucketName}.zip`;
 
       traverseFolder(folderPath, zip);
 
