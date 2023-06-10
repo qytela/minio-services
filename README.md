@@ -18,12 +18,6 @@ git clone https://github.com/qytela/minio-services.git
 node index help
 ```
 
-`Executable file`
-
-```
-./minio-services.exe help
-```
-
 ```
 Usage: node index [options] [command]
 
